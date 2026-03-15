@@ -1,0 +1,57 @@
+/* Input Component Styles */
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon-left {
+  position: absolute;
+  left: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--neutral-500);
+  pointer-events: none;
+  font-size: 1.25rem;
+}
+
+.form-input.has-icon {
+  padding-left: 3rem;
+}
+
+.form-input.success {
+  border-color: var(--success-500);
+  background-color: rgba(16, 185, 129, 0.02);
+}
+
+.form-input.success:focus {
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.hint-message {
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  color: var(--neutral-500);
+}
+
+/* Disabled state */
+.form-input:disabled {
+  background-color: var(--neutral-100);
+  cursor: not-allowed;
+  color: var(--neutral-400);
+}
+
+@media (prefers-color-scheme: dark) {
+  .form-input:disabled {
+    background-color: var(--neutral-800);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .form-input {
+    font-size: 16px;
+  }
+}
