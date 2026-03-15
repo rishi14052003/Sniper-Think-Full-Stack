@@ -8,6 +8,7 @@ import Button from '../common/Button';
 import Loader from '../common/Loader';
 import { apiService } from '../../services/api';
 import { helpers } from '../../utils/helpers';
+import './StrategySection.css';
 
 const StrategySection = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -131,38 +132,50 @@ const StrategySection = () => {
   };
 
   return (
-    <section ref={sectionRef} className="section">
-      <div className="container">
+    <section ref={sectionRef} className="strategy-section">
+      <div className="strategy-container">
         <motion.div
+          className="strategy-content"
           variants={sectionVariants}
           initial="hidden"
           animate="visible"
         >
           {/* Header */}
           <motion.div
-            className="text-center mb-8"
-            initial={{ opacity: 0, y: -30 }}
+            className="strategy-header"
+            initial={{ opacity: 0, y: -40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <h1 className="text-5xl font-bold text-white mb-4">
+            <h1 className="strategy-title">
               SniperThink Strategy Flow
             </h1>
-            <p className="text-xl text-white text-opacity-90 max-w-3xl mx-auto">
+            <p className="strategy-subtitle">
               Experience our comprehensive approach to data-driven strategy execution
             </p>
           </motion.div>
 
           {/* Progress Indicator */}
-          <ProgressIndicator
-            currentStep={currentStep}
-            totalSteps={steps.length}
-            steps={steps}
-            onStepClick={handleStepClick}
-          />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            <ProgressIndicator
+              currentStep={currentStep}
+              totalSteps={steps.length}
+              steps={steps}
+              onStepClick={handleStepClick}
+            />
+          </motion.div>
 
-          {/* Strategy Steps */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          {/* Strategy Steps Grid */}
+          <motion.div
+            className="strategy-grid"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+          >
             {steps.map((step, index) => (
               <StepCard
                 key={step.id}
@@ -172,71 +185,82 @@ const StrategySection = () => {
                 onClick={handleCardClick}
               />
             ))}
-          </div>
+          </motion.div>
 
           {/* Interest Form */}
           <motion.div
-            className="max-w-md mx-auto"
-            initial={{ opacity: 0, y: 30 }}
+            className="strategy-form-wrapper"
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
           >
-            <div className="card">
-              <h2 className="text-2xl font-bold mb-6 text-center">
-                Get Started Today
-              </h2>
+            <div className="strategy-form-container">
+              <div className="strategy-form-header">
+                <h2>Get Started Today</h2>
+                <p>Join us on this exciting journey</p>
+              </div>
               
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} className="strategy-form">
                 <Input
-                  label="Name"
+                  label="Full Name"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  placeholder="Enter your name"
+                  placeholder="John Doe"
                   error={formErrors.name}
                   required
                 />
 
                 <Input
-                  label="Email"
+                  label="Email Address"
                   name="email"
                   type="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  placeholder="Enter your email"
+                  placeholder="john@example.com"
                   error={formErrors.email}
                   required
                 />
 
                 {selectedStep && (
-                  <div className="mb-4 p-3 bg-blue-50 rounded-lg">
-                    <p className="text-sm text-blue-800">
-                      <strong>Selected Step:</strong> {selectedStep.title}
-                    </p>
-                  </div>
+                  <motion.div
+                    className="strategy-selected-step"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="selected-step-badge">
+                      <span className="badge-icon">✓</span>
+                      <span className="badge-text"><strong>Selected:</strong> {selectedStep.title}</span>
+                    </div>
+                  </motion.div>
                 )}
 
                 <Button
                   type="submit"
                   loading={isSubmitting}
                   disabled={isSubmitting}
-                  className="w-full"
+                  fullWidth
+                  size="large"
+                  variant="primary"
                 >
                   {isSubmitting ? 'Submitting...' : "I'm Interested"}
                 </Button>
 
                 {submitStatus && (
                   <motion.div
-                    className={`mt-4 p-3 rounded-lg text-center ${
-                      submitStatus.type === 'success' 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-red-100 text-red-800'
-                    }`}
+                    className={`submit-status ${submitStatus.type}`}
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3 }}
                   >
-                    {submitStatus.message}
+                    {submitStatus.type === 'success' && (
+                      <span className="status-icon">✓</span>
+                    )}
+                    {submitStatus.type === 'error' && (
+                      <span className="status-icon">✕</span>
+                    )}
+                    <span className="status-text">{submitStatus.message}</span>
                   </motion.div>
                 )}
               </form>
