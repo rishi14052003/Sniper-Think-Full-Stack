@@ -205,12 +205,12 @@ h6 {
 
 p {
   margin-bottom: var(--space-md);
-  color: var(--neutral-600);
+  color: var(--text-secondary);
 }
 
 @media (prefers-color-scheme: dark) {
   p {
-    color: var(--dark-text-secondary);
+    color: var(--text-secondary);
   }
 }
 
@@ -408,13 +408,13 @@ p {
   margin-bottom: var(--space-sm);
   font-weight: 600;
   font-size: 0.95rem;
-  color: var(--neutral-700);
+  color: var(--text-primary);
   transition: color var(--transition-base);
 }
 
 @media (prefers-color-scheme: dark) {
   .form-label {
-    color: var(--dark-text);
+    color: var(--text-primary);
   }
 }
 
@@ -442,9 +442,9 @@ p {
   .form-input,
   .form-textarea,
   .form-select {
-    background: var(--dark-bg-secondary);
-    color: var(--dark-text);
-    border-color: var(--neutral-700);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
   }
 }
 
@@ -529,8 +529,8 @@ p {
 
 @media (prefers-color-scheme: dark) {
   .card {
-    background: var(--dark-bg-secondary);
-    border-color: var(--neutral-700);
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
   }
 }
 
