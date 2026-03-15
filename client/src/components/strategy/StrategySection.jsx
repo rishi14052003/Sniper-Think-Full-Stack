@@ -13,6 +13,7 @@ import './StrategySection.css';
 const StrategySection = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedStep, setSelectedStep] = useState(null);
+  const [isManualSelection, setIsManualSelection] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: ''
@@ -24,11 +25,23 @@ const StrategySection = () => {
 
   const handleStepClick = (stepNumber) => {
     setCurrentStep(stepNumber);
+    setIsManualSelection(true);
+    
+    // Reset manual selection after 3 seconds to allow scroll-based progression again
+    setTimeout(() => {
+      setIsManualSelection(false);
+    }, 3000);
   };
 
   const handleCardClick = (step) => {
     setSelectedStep(step);
     setCurrentStep(step.id);
+    setIsManualSelection(true);
+    
+    // Reset manual selection after 3 seconds to allow scroll-based progression again
+    setTimeout(() => {
+      setIsManualSelection(false);
+    }, 3000);
   };
 
   const handleInputChange = (e) => {
@@ -102,6 +115,9 @@ const StrategySection = () => {
   // Scroll-based step progression
   useEffect(() => {
     const handleScroll = () => {
+      // Don't update if user has manually selected a step
+      if (isManualSelection) return;
+      
       if (!sectionRef.current) return;
       
       const rect = sectionRef.current.getBoundingClientRect();
@@ -118,7 +134,7 @@ const StrategySection = () => {
     handleScroll(); // Initial call
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [currentStep]);
+  }, [currentStep, isManualSelection]);
 
   const sectionVariants = {
     hidden: { opacity: 0 },

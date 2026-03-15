@@ -28,25 +28,33 @@
   transform: translateY(0);
 }
 
-@media (prefers-color-scheme: dark) {
-  .theme-toggle {
-    background: linear-gradient(135deg, var(--neutral-800) 0%, var(--neutral-900) 100%);
-    border-color: var(--neutral-700);
-    color: var(--primary-400);
-  }
+/* Light Mode Styles */
+html.light-mode .sun-icon {
+  color: var(--primary-600);
+}
 
-  .theme-toggle:hover {
-    border-color: var(--primary-500);
-    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
-  }
+html.light-mode .moon-icon {
+  color: var(--primary-400);
+}
 
-  .sun-icon {
-    color: var(--primary-400);
-  }
+/* Dark Mode Styles */
+html.dark-mode .theme-toggle {
+  background: linear-gradient(135deg, var(--neutral-800) 0%, var(--neutral-900) 100%);
+  border-color: var(--neutral-700);
+  color: var(--primary-400);
+}
 
-  .moon-icon {
-    color: var(--primary-300);
-  }
+html.dark-mode .theme-toggle:hover {
+  border-color: var(--primary-500);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+html.dark-mode .sun-icon {
+  color: var(--primary-400);
+}
+
+html.dark-mode .moon-icon {
+  color: var(--primary-300);
 }
 
 /* Icon Wrapper */

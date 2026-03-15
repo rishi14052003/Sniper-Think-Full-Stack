@@ -133,7 +133,21 @@ const ProgressIndicator = ({
                         ✓
                       </motion.span>
                     ) : (
-                      <span className="step-number">{stepNumber}</span>
+                      <motion.span 
+                        className="step-number"
+                        key={stepNumber}
+                        initial={{ scale: 1 }}
+                        animate={{ 
+                          scale: isActive ? [1, 1.2, 1] : 1,
+                          color: isActive ? "#ffffff" : "inherit"
+                        }}
+                        transition={{ 
+                          scale: { duration: 0.3 },
+                          color: { duration: 0.2 }
+                        }}
+                      >
+                        {stepNumber}
+                      </motion.span>
                     )}
                   </div>
                   {isActive && <div className="step-pulse" />}

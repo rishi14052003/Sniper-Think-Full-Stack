@@ -185,10 +185,6 @@
   flex: 1;
   cursor: pointer;
   transition: all var(--transition-base);
-
-  @media (max-width: 768px) {
-    gap: var(--space-sm);
-  }
 }
 
 .progress-step.active {
@@ -242,9 +238,11 @@
 }
 
 .step-number {
-  font-weight: 700;
-  font-size: 1.25rem;
+  font-weight: 800;
+  font-size: 1.4rem;
   color: var(--text-secondary);
+  transition: all var(--transition-base);
+  user-select: none;
 
   @media (prefers-color-scheme: dark) {
     color: var(--text-secondary);
@@ -252,9 +250,19 @@
 
   .progress-step.active & {
     color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
   .progress-step.completed & {
+    color: white;
+  }
+
+  .progress-step:hover & {
+    color: var(--primary-600);
+    transform: scale(1.1);
+  }
+
+  .progress-step.active:hover & {
     color: white;
   }
 }
