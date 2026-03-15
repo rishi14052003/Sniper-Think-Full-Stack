@@ -65,10 +65,10 @@
 
 .progress-subtitle {
   font-size: 0.95rem;
-  color: var(--neutral-500);
+  color: var(--text-secondary);
 
   @media (prefers-color-scheme: dark) {
-    color: var(--dark-text-secondary);
+    color: var(--text-secondary);
   }
 }
 
@@ -107,10 +107,10 @@
 
 .counter-total {
   font-weight: 600;
-  color: var(--neutral-600);
+  color: var(--text-secondary);
 
   @media (prefers-color-scheme: dark) {
-    color: var(--dark-text-secondary);
+    color: var(--text-secondary);
   }
 }
 
@@ -212,8 +212,8 @@
   flex-shrink: 0;
 
   @media (prefers-color-scheme: dark) {
-    background: var(--dark-bg);
-    border-color: var(--neutral-700);
+    background: var(--bg-primary);
+    border-color: var(--border-color);
   }
 }
 
@@ -244,10 +244,10 @@
 .step-number {
   font-weight: 700;
   font-size: 1.25rem;
-  color: var(--neutral-700);
+  color: var(--text-secondary);
 
   @media (prefers-color-scheme: dark) {
-    color: var(--dark-text-secondary);
+    color: var(--text-secondary);
   }
 
   .progress-step.active & {
@@ -368,8 +368,8 @@
   border: 2px solid var(--neutral-200);
 
   @media (prefers-color-scheme: dark) {
-    background: var(--dark-bg);
-    border-color: var(--neutral-700);
+    background: var(--bg-primary);
+    border-color: var(--border-color);
   }
 
   @media (max-width: 640px) {
