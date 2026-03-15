@@ -39,6 +39,14 @@
     border-color: var(--primary-500);
     box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
   }
+
+  .sun-icon {
+    color: var(--primary-400);
+  }
+
+  .moon-icon {
+    color: var(--primary-300);
+  }
 }
 
 /* Icon Wrapper */
@@ -54,11 +62,13 @@
 .sun-icon {
   width: 20px;
   height: 20px;
+  color: var(--primary-600);
 }
 
 .moon-icon {
   width: 20px;
   height: 20px;
+  color: var(--primary-400);
 }
 
 /* Mobile Responsive */
