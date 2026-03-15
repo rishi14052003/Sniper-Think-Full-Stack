@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import './ProgressIndicator.css';
 
 const ProgressIndicator = ({ 
   currentStep, 
@@ -7,17 +8,28 @@ const ProgressIndicator = ({
   steps = [],
   onStepClick 
 }) => {
-  const progressPercentage = (currentStep / totalSteps) * 100;
+  const progressPercentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
 
-  const indicatorVariants = {
+  const containerVariants = {
     hidden: { opacity: 0, y: -20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
+        ease: "easeOut",
+        staggerChildren: 0.1,
+        delayChildren: 0.2
       }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.4, ease: "easeOut" }
     }
   };
 
@@ -26,9 +38,9 @@ const ProgressIndicator = ({
     visible: {
       width: `${progressPercentage}%`,
       transition: {
-        duration: 1,
+        duration: 1.2,
         ease: "easeOut",
-        delay: 0.3
+        delay: 0.4
       }
     }
   };
@@ -39,48 +51,56 @@ const ProgressIndicator = ({
       scale: 1,
       opacity: 1,
       transition: {
-        delay: i * 0.1 + 0.5,
-        duration: 0.4,
+        delay: i * 0.12 + 0.5,
+        duration: 0.5,
         ease: "easeOut"
       }
-    }),
-    active: {
-      scale: 1.2,
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut"
-      }
-    }
+    })
   };
 
   return (
     <motion.div
-      className="progress-indicator mb-8"
-      variants={indicatorVariants}
+      className="progress-indicator-wrapper"
+      variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-3xl font-bold">Strategy Progress</h2>
-        <span className="text-lg font-semibold">
-          Step {currentStep} of {totalSteps}
-        </span>
-      </div>
+      {/* Header */}
+      <motion.div className="progress-header" variants={itemVariants}>
+        <div className="progress-title-group">
+          <h2 className="progress-main-title">Strategy Progress</h2>
+          <p className="progress-subtitle">Follow the 4-step approach to achieve your goals</p>
+        </div>
+        <motion.div 
+          className="progress-counter"
+          key={currentStep}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <span className="counter-current">{currentStep}</span>
+          <span className="counter-divider">/</span>
+          <span className="counter-total">{totalSteps}</span>
+        </motion.div>
+      </motion.div>
 
-      <div className="relative">
-        {/* Progress bar background */}
-        <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
-          {/* Animated progress bar */}
+      {/* Main Progress Timeline */}
+      <motion.div className="progress-timeline" variants={itemVariants}>
+        {/* Progress Line Background */}
+        <div className="progress-line-container">
+          <div className="progress-line-bg" />
+          
+          {/* Animated Progress Line */}
           <motion.div
-            className="h-full bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full"
+            className="progress-line-fill"
             variants={progressVariants}
             initial="hidden"
             animate="visible"
           />
         </div>
 
-        {/* Step indicators */}
-        <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 flex justify-between">
+        {/* Steps */}
+        <div className="progress-steps">
           {steps.map((step, index) => {
             const stepNumber = index + 1;
             const isActive = stepNumber === currentStep;
@@ -89,58 +109,84 @@ const ProgressIndicator = ({
             return (
               <motion.div
                 key={step.id}
-                className="relative"
+                className={`progress-step ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}
                 variants={stepVariants}
                 initial="hidden"
                 animate="visible"
-                whileHover={isActive ? "active" : ""}
                 custom={index}
+                onClick={() => onStepClick && onStepClick(stepNumber)}
               >
+                {/* Step Circle */}
                 <motion.div
-                  className={`w-8 h-8 rounded-full border-4 cursor-pointer transition-all ${
-                    isActive
-                      ? 'border-indigo-600 bg-white'
-                      : isCompleted
-                      ? 'border-green-500 bg-green-500'
-                      : 'border-gray-300 bg-white'
-                  }`}
-                  onClick={() => onStepClick && onStepClick(stepNumber)}
-                  whileHover={{ scale: 1.2 }}
-                  whileTap={{ scale: 0.9 }}
+                  className="step-circle"
+                  whileHover={{ scale: isActive ? 1.15 : 1.08 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <div className="w-full h-full flex items-center justify-center text-xs font-bold">
-                    {isCompleted ? '✓' : stepNumber}
+                  <div className="step-circle-content">
+                    {isCompleted ? (
+                      <motion.span 
+                        className="step-icon"
+                        initial={{ scale: 0, rotate: -90 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
+                      >
+                        ✓
+                      </motion.span>
+                    ) : (
+                      <span className="step-number">{stepNumber}</span>
+                    )}
                   </div>
+                  {isActive && <div className="step-pulse" />}
                 </motion.div>
 
-                {/* Step tooltip */}
-                <motion.div
-                  className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap"
-                  initial={{ opacity: 0, y: 5 }}
-                  whileHover={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2 }}
+                {/* Step Label */}
+                <motion.div 
+                  className="step-label"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.12 + 0.7, duration: 0.4 }}
                 >
-                  {step.title}
+                  <p className="step-name">{step.title}</p>
+                  <p className="step-description">{step.description || ''}</p>
                 </motion.div>
               </motion.div>
             );
           })}
         </div>
-      </div>
+      </motion.div>
 
-      {/* Current step info */}
+      {/* Current Step Card */}
       {steps[currentStep - 1] && (
         <motion.div
-          className="mt-6 p-4 bg-gradient-to-r from-purple-100 to-indigo-100 rounded-lg"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.8 }}
+          className="progress-step-detail"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9, duration: 0.5 }}
+          key={`detail-${currentStep}`}
         >
-          <div className="flex items-center">
-            <span className="text-2xl mr-3">{steps[currentStep - 1].icon}</span>
-            <div>
-              <h3 className="font-semibold text-lg">{steps[currentStep - 1].title}</h3>
-              <p className="text-gray-600 text-sm">{steps[currentStep - 1].description}</p>
+          <div className="step-detail-content">
+            <motion.span 
+              className="detail-icon"
+              animate={{ rotate: [0, 5, -5, 0] }}
+              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+            >
+              {steps[currentStep - 1].icon}
+            </motion.span>
+            <div className="detail-text">
+              <h3 className="detail-title">{steps[currentStep - 1].title}</h3>
+              <p className="detail-description">{steps[currentStep - 1].description}</p>
+            </div>
+          </div>
+          <div className="step-detail-progress">
+            <div className="progress-dots">
+              {Array.from({ length: totalSteps }).map((_, i) => (
+                <motion.div
+                  key={i}
+                  className={`dot ${i + 1 === currentStep ? 'active' : ''} ${i + 1 < currentStep ? 'completed' : ''}`}
+                  animate={i + 1 === currentStep ? { scale: [1, 1.2, 1] } : {}}
+                  transition={{ duration: 0.8, repeat: Infinity }}
+                />
+              ))}
             </div>
           </div>
         </motion.div>
