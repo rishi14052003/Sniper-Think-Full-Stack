@@ -1,0 +1,76 @@
+/* Theme Toggle Component Styles */
+
+.theme-toggle {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary-100) 0%, var(--secondary-100) 100%);
+  border: 2px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  color: var(--primary-600);
+  font-weight: 700;
+  padding: 0;
+}
+
+.theme-toggle:hover {
+  background: linear-gradient(135deg, var(--primary-100) 0%, var(--secondary-100) 100%);
+  border-color: var(--primary-400);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
+  transform: translateY(-2px);
+}
+
+.theme-toggle:active {
+  transform: translateY(0);
+}
+
+@media (prefers-color-scheme: dark) {
+  .theme-toggle {
+    background: linear-gradient(135deg, var(--neutral-800) 0%, var(--neutral-900) 100%);
+    border-color: var(--neutral-700);
+    color: var(--primary-400);
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--primary-500);
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+  }
+}
+
+/* Icon Wrapper */
+.theme-icon-wrapper {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.sun-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.moon-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 640px) {
+  .theme-toggle {
+    width: 44px;
+    height: 44px;
+  }
+
+  .sun-icon,
+  .moon-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
