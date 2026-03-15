@@ -1,25 +1,29 @@
-const mysql = require('mysql2/promise');
+const { Pool } = require('pg');
 require('dotenv').config();
 
 const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || 'root',
+  user: process.env.DB_USER || 'postgres',
+  password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'sniper_think',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
+  port: process.env.DB_PORT || 5432,
+  ssl: {
+    rejectUnauthorized: false
+  },
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 };
 
 // Create connection pool
-const pool = mysql.createPool(dbConfig);
+const pool = new Pool(dbConfig);
 
 // Test connection
 const testConnection = async () => {
   try {
-    const connection = await pool.getConnection();
+    const client = await pool.connect();
     console.log('✅ Database connected successfully');
-    connection.release();
+    client.release();
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
     process.exit(1);
@@ -29,12 +33,12 @@ const testConnection = async () => {
 // Initialize database tables
 const initializeDatabase = async () => {
   try {
-    const connection = await pool.getConnection();
+    const client = await pool.connect();
     
     // Create users table
-    await connection.execute(`
+    await client.query(`
       CREATE TABLE IF NOT EXISTS users (
-        id INT AUTO_INCREMENT PRIMARY KEY,
+        id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         email VARCHAR(255) UNIQUE NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -42,49 +46,46 @@ const initializeDatabase = async () => {
     `);
 
     // Create files table
-    await connection.execute(`
+    await client.query(`
       CREATE TABLE IF NOT EXISTS files (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id INT,
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
         file_path VARCHAR(500) NOT NULL,
         original_name VARCHAR(255) NOT NULL,
-        file_size INT NOT NULL,
+        file_size INTEGER NOT NULL,
         file_type VARCHAR(50) NOT NULL,
-        uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+        uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
     // Create jobs table
-    await connection.execute(`
+    await client.query(`
       CREATE TABLE IF NOT EXISTS jobs (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        file_id INT,
-        status ENUM('pending', 'processing', 'completed', 'failed') DEFAULT 'pending',
-        progress INT DEFAULT 0,
+        id SERIAL PRIMARY KEY,
+        file_id INTEGER REFERENCES files(id) ON DELETE CASCADE,
+        status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'completed', 'failed')),
+        progress INTEGER DEFAULT 0,
         error_message TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        FOREIGN KEY (file_id) REFERENCES files(id) ON DELETE CASCADE
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
     // Create results table
-    await connection.execute(`
+    await client.query(`
       CREATE TABLE IF NOT EXISTS results (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        job_id INT UNIQUE,
-        word_count INT DEFAULT 0,
-        paragraph_count INT DEFAULT 0,
-        keywords JSON,
-        processing_time INT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE CASCADE
+        id SERIAL PRIMARY KEY,
+        job_id INTEGER UNIQUE REFERENCES jobs(id) ON DELETE CASCADE,
+        word_count INTEGER DEFAULT 0,
+        paragraph_count INTEGER DEFAULT 0,
+        keywords JSONB,
+        processing_time INTEGER,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
     console.log('✅ Database tables initialized successfully');
-    connection.release();
+    client.release();
   } catch (error) {
     console.error('❌ Database initialization failed:', error.message);
     throw error;
