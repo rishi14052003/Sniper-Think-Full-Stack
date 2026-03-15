@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import './Button.css';
 
 const Button = ({ 
   children, 
@@ -10,12 +11,17 @@ const Button = ({
   onClick, 
   type = 'button',
   className = '',
+  fullWidth = false,
+  icon = null,
   ...props 
 }) => {
   const baseClasses = 'btn';
   const variantClasses = {
     primary: 'btn-primary',
-    secondary: 'btn-secondary'
+    secondary: 'btn-secondary',
+    outline: 'btn-outline',
+    success: 'btn-success',
+    error: 'btn-error'
   };
   const sizeClasses = {
     small: 'btn-sm',
@@ -25,21 +31,22 @@ const Button = ({
 
   const buttonClasses = [
     baseClasses,
-    variantClasses[variant],
-    sizeClasses[size],
+    variantClasses[variant] || variantClasses.primary,
+    sizeClasses[size] || sizeClasses.medium,
+    fullWidth && 'btn-full-width',
     className
   ].filter(Boolean).join(' ');
 
   const buttonVariants = {
     hover: {
-      scale: 1.05,
+      scale: 1.02,
       transition: {
-        duration: 0.2,
+        duration: 0.15,
         ease: "easeInOut"
       }
     },
     tap: {
-      scale: 0.95,
+      scale: 0.98,
       transition: {
         duration: 0.1,
         ease: "easeInOut"
@@ -58,8 +65,15 @@ const Button = ({
       whileTap={!disabled && !loading ? "tap" : ""}
       {...props}
     >
-      {loading && <span className="spinner mr-2"></span>}
-      {children}
+      {loading && (
+        <motion.span 
+          className="spinner-small"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+        />
+      )}
+      {icon && <span className="btn-icon">{icon}</span>}
+      <span>{children}</span>
     </motion.button>
   );
 };
