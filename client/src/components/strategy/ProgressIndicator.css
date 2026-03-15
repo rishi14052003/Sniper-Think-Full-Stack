@@ -53,7 +53,7 @@
   margin-bottom: var(--space-sm);
 
   @media (prefers-color-scheme: dark) {
-    color: var(--dark-text);
+    color: var(--text-primary);
     -webkit-text-fill-color: unset;
     background: none;
   }
@@ -296,11 +296,11 @@
 .step-name {
   font-weight: 700;
   font-size: 0.95rem;
-  color: var(--neutral-900);
+  color: var(--text-primary);
   margin-bottom: var(--space-xs);
 
   @media (prefers-color-scheme: dark) {
-    color: var(--dark-text);
+    color: var(--text-primary);
   }
 
   @media (max-width: 768px) {
@@ -310,11 +310,11 @@
 
 .step-description {
   font-size: 0.8rem;
-  color: var(--neutral-500);
+  color: var(--text-secondary);
   line-height: 1.4;
 
   @media (prefers-color-scheme: dark) {
-    color: var(--dark-text-secondary);
+    color: var(--text-secondary);
   }
 
   @media (max-width: 768px) {
@@ -386,11 +386,11 @@
 .detail-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--neutral-900);
+  color: var(--text-primary);
   margin-bottom: var(--space-xs);
 
   @media (prefers-color-scheme: dark) {
-    color: var(--dark-text);
+    color: var(--text-primary);
   }
 
   @media (max-width: 640px) {
@@ -400,11 +400,11 @@
 
 .detail-description {
   font-size: 0.95rem;
-  color: var(--neutral-600);
+  color: var(--text-secondary);
   line-height: 1.5;
 
   @media (prefers-color-scheme: dark) {
-    color: var(--dark-text-secondary);
+    color: var(--text-secondary);
   }
 
   @media (max-width: 640px) {
