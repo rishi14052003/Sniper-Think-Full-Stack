@@ -1,5 +1,7 @@
 const { Pool } = require('pg');
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
+
+console.log('🔍 Debug - .env loaded from:', process.cwd());
 
 const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
@@ -21,11 +23,19 @@ const pool = new Pool(dbConfig);
 // Test connection
 const testConnection = async () => {
   try {
+    console.log('🔍 Debug - Environment Variables:');
+    console.log('DB_HOST:', process.env.DB_HOST);
+    console.log('DB_USER:', process.env.DB_USER);
+    console.log('DB_NAME:', process.env.DB_NAME);
+    console.log('DB_PORT:', process.env.DB_PORT);
+    console.log('🔍 Debug - DB Config:', dbConfig);
+    
     const client = await pool.connect();
     console.log('✅ Database connected successfully');
     client.release();
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
+    console.error('Full error:', error);
     process.exit(1);
   }
 };
