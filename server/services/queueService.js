@@ -5,6 +5,12 @@ class QueueService {
   constructor() {
     this.queues = new Map();
     this.workers = new Map();
+    this.redisAvailable = true; // Track Redis availability
+  }
+
+  // Set Redis availability status
+  setRedisAvailable(available) {
+    this.redisAvailable = available;
   }
 
   // Create or get a queue
@@ -62,6 +68,11 @@ class QueueService {
 
   // Create worker for queue
   createWorker(queueName, processor, options = {}) {
+    if (!this.redisAvailable) {
+      console.warn(`⚠️ Redis is not available. Worker for queue '${queueName}' will not be created.`);
+      return null;
+    }
+
     if (this.workers.has(queueName)) {
       console.warn(`⚠️ Worker for queue '${queueName}' already exists`);
       return this.workers.get(queueName);

@@ -1,16 +1,17 @@
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useScrollAnimation } from '../../hooks/useScrollAnimation';
+import './StepCard.css';
 
 const StepCard = ({ step, index, isActive, onClick }) => {
   const cardRef = useRef(null);
-  const { isVisible, scrollProgress } = useScrollAnimation(cardRef);
+  const { isVisible } = useScrollAnimation(cardRef);
 
   const cardVariants = {
     hidden: {
       opacity: 0,
       y: 50,
-      scale: 0.9
+      scale: 0.95
     },
     visible: {
       opacity: 1,
@@ -18,105 +19,114 @@ const StepCard = ({ step, index, isActive, onClick }) => {
       scale: 1,
       transition: {
         duration: 0.6,
-        delay: index * 0.1,
+        delay: index * 0.12,
         ease: "easeOut"
       }
     }
   };
 
   const iconVariants = {
-    hidden: { rotate: -180, scale: 0 },
+    hidden: { rotate: -90, scale: 0, opacity: 0 },
     visible: {
       rotate: 0,
       scale: 1,
+      opacity: 1,
       transition: {
-        duration: 0.8,
-        delay: index * 0.1 + 0.3,
+        duration: 0.7,
+        delay: index * 0.12 + 0.2,
         ease: "easeOut"
       }
     }
   };
 
-  const hoverVariants = {
-    hover: {
-      scale: 1.05,
-      boxShadow: "0 20px 40px rgba(0, 0, 0, 0.2)",
+  const contentVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
       transition: {
-        duration: 0.3,
-        ease: "easeInOut"
+        delay: index * 0.12 + 0.3 + i * 0.1,
+        duration: 0.5,
+        ease: "easeOut"
       }
-    }
+    })
   };
 
   return (
     <motion.div
       ref={cardRef}
-      className="card"
+      className={`step-card ${isActive ? 'active' : ''}`}
       variants={cardVariants}
       initial="hidden"
       animate={isVisible ? "visible" : "hidden"}
-      whileHover="hover"
       onClick={() => onClick && onClick(step)}
-      style={{
-        background: isActive 
-          ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' 
-          : 'white',
-        color: isActive ? 'white' : '#333',
-        cursor: onClick ? 'pointer' : 'default'
-      }}
     >
-      <div className="flex items-center mb-4">
+      {/* Background Gradient */}
+      <div className={`step-card-bg ${isActive ? 'active' : ''}`} />
+      
+      {/* Content */}
+      <div className="step-card-content">
+        {/* Icon */}
         <motion.div
-          className="text-4xl mr-4"
+          className="step-card-icon"
           variants={iconVariants}
           initial="hidden"
           animate={isVisible ? "visible" : "hidden"}
         >
           {step.icon}
         </motion.div>
-        <div>
-          <motion.h3 
-            className="text-2xl font-bold mb-2"
-            initial={{ opacity: 0, x: -20 }}
-            animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-            transition={{ delay: index * 0.1 + 0.5 }}
-          >
-            {step.title}
-          </motion.h3>
+
+        {/* Header */}
+        <div className="step-card-header">
           <motion.div
-            className="w-16 h-1 bg-current rounded-full"
-            initial={{ width: 0 }}
-            animate={isVisible ? { width: "4rem" } : { width: 0 }}
-            transition={{ delay: index * 0.1 + 0.7, duration: 0.5 }}
+            custom={0}
+            variants={contentVariants}
+            initial="hidden"
+            animate={isVisible ? "visible" : "hidden"}
+          >
+            <h3 className="step-card-title">{step.title}</h3>
+          </motion.div>
+          
+          <motion.div
+            className="step-card-divider"
+            initial={{ scaleX: 0 }}
+            animate={isVisible ? { scaleX: 1 } : { scaleX: 0 }}
+            transition={{ delay: index * 0.12 + 0.5, duration: 0.6 }}
           />
         </div>
-      </div>
-      
-      <motion.p
-        className="text-lg leading-relaxed"
-        initial={{ opacity: 0, y: 20 }}
-        animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ delay: index * 0.1 + 0.9 }}
-      >
-        {step.description}
-      </motion.p>
 
-      {scrollProgress > 0 && (
-        <motion.div
-          className="mt-4 pt-4 border-t border-current border-opacity-20"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
+        {/* Description */}
+        <motion.p
+          className="step-card-description"
+          custom={1}
+          variants={contentVariants}
+          initial="hidden"
+          animate={isVisible ? "visible" : "hidden"}
         >
-          <div className="w-full bg-current bg-opacity-20 rounded-full h-2">
-            <motion.div
-              className="h-full bg-current rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: `${scrollProgress * 100}%` }}
-              transition={{ duration: 0.3 }}
-            />
-          </div>
-        </motion.div>
+          {step.description}
+        </motion.p>
+
+        {/* Badge */}
+        {step.badge && (
+          <motion.div
+            className="step-card-badge"
+            custom={2}
+            variants={contentVariants}
+            initial="hidden"
+            animate={isVisible ? "visible" : "hidden"}
+          >
+            <span>{step.badge}</span>
+          </motion.div>
+        )}
+      </div>
+
+      {/* Interactive Indicator */}
+      {onClick && (
+        <motion.div 
+          className="step-card-indicator"
+          initial={{ opacity: 0 }}
+          animate={isVisible ? { opacity: 1 } : { opacity: 0 }}
+        />
       )}
     </motion.div>
   );

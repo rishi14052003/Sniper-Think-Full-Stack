@@ -24,8 +24,8 @@
   .strategy-section {
     background: linear-gradient(
       135deg,
-      var(--dark-bg) 0%,
-      var(--dark-bg-secondary) 100%
+      var(--bg-primary) 0%,
+      var(--bg-secondary) 100%
     );
   }
 }
@@ -85,7 +85,7 @@
 
 @media (prefers-color-scheme: dark) {
   .strategy-title {
-    color: var(--dark-text);
+    color: var(--text-primary);
     -webkit-text-fill-color: unset;
     background: none;
     background: linear-gradient(135deg, var(--primary-400) 0%, var(--secondary-400) 100%);
@@ -97,7 +97,7 @@
 
 .strategy-subtitle {
   font-size: 1.15rem;
-  color: var(--neutral-600);
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
@@ -105,7 +105,7 @@
 
 @media (prefers-color-scheme: dark) {
   .strategy-subtitle {
-    color: var(--dark-text-secondary);
+    color: var(--text-secondary);
   }
 }
 
@@ -184,7 +184,7 @@
 
 @media (prefers-color-scheme: dark) {
   .strategy-form-container {
-    background: linear-gradient(135deg, var(--dark-bg-secondary) 0%, rgba(15, 23, 42, 0.8) 100%);
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(15, 23, 42, 0.8) 100%);
     border-color: rgba(14, 165, 233, 0.2);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(14, 165, 233, 0.2);
   }
@@ -219,7 +219,7 @@
 
 @media (prefers-color-scheme: dark) {
   .strategy-form-header h2 {
-    color: var(--dark-text);
+    color: var(--text-primary);
     -webkit-text-fill-color: unset;
     background: linear-gradient(135deg, var(--primary-400) 0%, var(--secondary-400) 100%);
     -webkit-background-clip: text;
@@ -235,7 +235,7 @@
 }
 
 .strategy-form-header p {
-  color: var(--neutral-600);
+  color: var(--text-secondary);
   font-size: 1rem;
   font-weight: 500;
   letter-spacing: 0.3px;
@@ -243,7 +243,7 @@
 
 @media (prefers-color-scheme: dark) {
   .strategy-form-header p {
-    color: var(--dark-text-secondary);
+    color: var(--text-secondary);
   }
 }
 
@@ -278,9 +278,9 @@
 
 @media (prefers-color-scheme: dark) {
   .strategy-form input {
-    background: var(--dark-bg);
-    border-color: var(--neutral-700);
-    color: var(--dark-text);
+    background: var(--bg-primary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
   }
 
   .strategy-form input:focus {
@@ -289,7 +289,7 @@
   }
 
   .strategy-form input::placeholder {
-    color: var(--dark-text-secondary);
+    color: var(--text-secondary);
   }
 }
 
@@ -365,7 +365,7 @@
 
 @media (prefers-color-scheme: dark) {
   .badge-text {
-    color: var(--dark-text);
+    color: var(--text-primary);
   }
 }
 

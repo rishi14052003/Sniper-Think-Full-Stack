@@ -188,13 +188,18 @@ const initializeServer = async () => {
     // Initialize database tables
     await initializeDatabase();
     
-    // Test Redis connection
-    await testRedisConnection();
+    // Test Redis connection (non-blocking - server works without it)
+    const redisConnected = await testRedisConnection();
     
-    // Create file processing worker
-    queueService.createWorker('file-processing', fileProcessor, {
-      concurrency: 3 // Process 3 files concurrently
-    });
+    // Set Redis availability in queue service
+    queueService.setRedisAvailable(redisConnected);
+    
+    // Create file processing worker only if Redis is available
+    if (redisConnected) {
+      queueService.createWorker('file-processing', fileProcessor, {
+        concurrency: 3 // Process 3 files concurrently
+      });
+    }
     
     console.log('✅ Server initialized successfully');
     

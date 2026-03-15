@@ -18,9 +18,13 @@ const testConnection = async () => {
   try {
     await redis.connect();
     console.log('✅ Redis connected successfully');
+    return true;
   } catch (error) {
-    console.error('❌ Redis connection failed:', error.message);
-    process.exit(1);
+    console.error('⚠️  Redis connection failed:', error.message);
+    console.error('⚠️  Job queue features will be unavailable. Please install and run Redis.');
+    console.error('   - Windows: Install Redis from https://github.com/microsoftarchive/redis/releases');
+    console.error('   - Or use Windows Subsystem for Linux (WSL) to install Redis');
+    return false;
   }
 };
 

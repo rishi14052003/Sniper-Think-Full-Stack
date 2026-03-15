@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ThemeProvider } from './context/ThemeContext';
+import Header from './components/common/Header';
 import Home from './pages/Home';
 import './styles/global.css';
 
@@ -18,16 +20,19 @@ const App = () => {
   };
 
   return (
-    <motion.div
-      className="App"
-      variants={appVariants}
-      initial="initial"
-      animate="animate"
-    >
-      <AnimatePresence mode="wait">
-        <Home key="home" />
-      </AnimatePresence>
-    </motion.div>
+    <ThemeProvider>
+      <motion.div
+        className="App"
+        variants={appVariants}
+        initial="initial"
+        animate="animate"
+      >
+        <Header />
+        <AnimatePresence mode="wait">
+          <Home key="home" />
+        </AnimatePresence>
+      </motion.div>
+    </ThemeProvider>
   );
 };
 
