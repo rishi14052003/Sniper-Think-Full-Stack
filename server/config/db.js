@@ -1,5 +1,5 @@
 const { Pool } = require('pg');
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config();
 
 console.log('🔍 Debug - .env loaded from:', process.cwd());
 
